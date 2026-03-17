@@ -44,3 +44,33 @@ A cloud-native note-taking application built with Java Spring Boot that stores d
 ### Run with Maven
 ```bash
 ./mvnw spring-boot:run
+```
+### Test the API
+```bash
+curl http://localhost:8080/api/notes
+```
+
+### 📸 Screenshots
+<img width="1470" height="956" alt="Screenshot 2026-03-17 at 5 51 01 PM" src="https://github.com/user-attachments/assets/600fee5c-bd5d-4d23-b867-67f9e59c8d8a" />
+<img width="1470" height="956" alt="Screenshot 2026-03-17 at 5 51 16 PM" src="https://github.com/user-attachments/assets/8906cca2-069d-4c8b-9503-d949d919957d" />
+
+### 🌟 Why This Project
+This project demonstrates exactly what employers are looking for:
+
+- Java Development - Spring Boot REST API
+
+- Cloud-Native Skills - AWS DynamoDB integration
+
+- Containerization - Docker packaging
+
+- DevOps - CI/CD with GitHub Actions
+
+- Best Practices - Error handling, environment variables
+
+📝 License
+MIT
+
+👨‍💻 Author
+Kaur Sandeep
+
+
