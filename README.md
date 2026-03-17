@@ -1,4 +1,4 @@
-cat > README.md << 'EOF'
+
 # ☁️ Cloud Note-Taker App
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
