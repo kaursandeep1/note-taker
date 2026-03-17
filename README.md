@@ -54,7 +54,6 @@ curl http://localhost:8080/api/notes
 (jyoti nickname)
 <img width="1470" height="956" alt="Screenshot 2026-03-17 at 5 51 01 PM" src="https://github.com/user-attachments/assets/600fee5c-bd5d-4d23-b867-67f9e59c8d8a" />
 <img width="1470" height="956" alt="Screenshot 2026-03-17 at 5 51 16 PM" src="https://github.com/user-attachments/assets/8906cca2-069d-4c8b-9503-d949d919957d" />
-<img width="1470" height="956" alt="Screenshot 2026-03-17 at 6 22 01 PM" src="https://github.com/user-attachments/assets/5720efcf-169c-424c-b52e-036672bfa344" />
 <img width="1470" height="956" alt="Screenshot 2026-03-17 at 6 21 53 PM" src="https://github.com/user-attachments/assets/b9a813be-0b5b-4900-a652-bdf23fc33cbf" />
 <img width="1470" height="956" alt="Screenshot 2026-03-17 at 6 21 45 PM" src="https://github.com/user-attachments/assets/06e70595-0290-49d7-8b50-d1885a838d01" />
 
