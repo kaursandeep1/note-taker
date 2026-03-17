@@ -58,6 +58,10 @@ curl http://localhost:8080/api/notes
 <img width="1470" height="956" alt="Screenshot 2026-03-17 at 6 21 45 PM" src="https://github.com/user-attachments/assets/06e70595-0290-49d7-8b50-d1885a838d01" />
 
 
+https://github.com/user-attachments/assets/701f845d-ec37-4977-805b-991feb437d74
+
+
+
 
 ### 🌟 Why This Project
 This project demonstrates exactly what employers are looking for:
