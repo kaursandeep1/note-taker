@@ -1,0 +1,22 @@
+# Compiled files
+target/
+*.class
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+
+# Docker
+Dockerfile
+.dockerignore
+
+# AWS credentials (never commit these!)
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+
+# System files
+.DS_Store
