@@ -61,6 +61,28 @@ public class NoteController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteNote(@PathVariable String id) {
+        if (dynamoDbClient == null) {
+            return "Cannot delete - DynamoDB not connected";
+        }
+        
+        try {
+            Map<String, AttributeValue> key = new HashMap<>();
+            key.put("id", AttributeValue.builder().s(id).build());
+            
+            DeleteItemRequest request = DeleteItemRequest.builder()
+                    .tableName(tableName)
+                    .key(key)
+                    .build();
+            
+            dynamoDbClient.deleteItem(request);
+            return "✅ Note deleted successfully";
+        } catch (DynamoDbException e) {
+            return "❌ Error deleting note: " + e.getMessage();
+        }
+    }
+
     @GetMapping
     public List<Map<String, String>> getAllNotes() {
         // If DynamoDB is not available, return empty list

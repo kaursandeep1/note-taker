@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☁️ Cloud Note Taker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        #noteInput {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        #noteInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        #addButton {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #addButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        #addButton:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .stats h2 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .note-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9em;
+        }
+
+        .notes-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .note-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .note-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .note-content {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 10px;
+            padding-right: 40px;
+            word-wrap: break-word;
+        }
+
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .note-id {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+
+        .note-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #ff4757;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #ffe9e9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            fill: #ddd;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .input-section {
+                flex-direction: column;
+            }
+            
+            #addButton {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☁️ Cloud Note Taker</h1>
+            <p>Your notes are safely stored in AWS DynamoDB</p>
+            <div class="badge-container">
+                <span class="badge">Java 17</span>
+                <span class="badge">Spring Boot</span>
+                <span class="badge">AWS DynamoDB</span>
+                <span class="badge">Docker</span>
+                <span class="badge">CI/CD</span>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <input type="text" id="noteInput" placeholder="Write your note here..." autocomplete="off">
+                <button id="addButton">Save to Cloud</button>
+            </div>
+
+            <div class="stats">
+                <h2>Your Notes</h2>
+                <span class="note-count" id="noteCount">0</span>
+            </div>
+
+            <div id="notesContainer">
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading your notes from AWS...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const API_URL = '/api/notes';
+        let notes = [];
+
+        // Show toast message
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return `${Math.floor(diff/60000)} minutes ago`;
+            if (diff < 86400000) return `${Math.floor(diff/3600000)} hours ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Load notes from API
+        async function loadNotes() {
+            const loading = document.getElementById('loading');
+            const notesContainer = document.getElementById('notesContainer');
+            
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Failed to load notes');
+                
+                notes = await response.json();
+                displayNotes();
+            } catch (error) {
+                console.error('Error loading notes:', error);
+                notesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        <p>Error loading notes. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Display notes in grid
+        function displayNotes() {
+            const container = document.getElementById('notesContainer');
+            const noteCount = document.getElementById('noteCount');
+            
+            noteCount.textContent = notes.length;
+
+            if (notes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2v-4H9v-2h5v6z"/>
+                        </svg>
+                        <p>No notes yet. Add your first note above!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="notes-grid">
+                    ${notes.map(note => `
+                        <div class="note-card" data-id="${note.id}">
+                            <button class="delete-btn" onclick="deleteNote('${note.id}')" title="Delete note">✕</button>
+                            <div class="note-content">${escapeHtml(note.note)}</div>
+                            <div class="note-meta">
+                                <span class="note-id">${note.id.substring(0, 8)}...</span>
+                                <span class="note-time">🕒 ${formatTime(note.timestamp)}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Add new note
+        async function addNote() {
+            const input = document.getElementById('noteInput');
+            const note = input.value.trim();
+            
+            if (!note) {
+                showToast('Please enter a note!', 'error');
+                return;
+            }
+
+            const addButton = document.getElementById('addButton');
+            addButton.disabled = true;
+            addButton.textContent = 'Saving...';
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: note
+                });
+
+                if (!response.ok) throw new Error('Failed to save note');
+                
+                const result = await response.text();
+                showToast('✅ Note saved to AWS!');
+                input.value = '';
+                await loadNotes(); // Reload the list
+            } catch (error) {
+                console.error('Error saving note:', error);
+                showToast('❌ Error saving note', 'error');
+            } finally {
+                addButton.disabled = false;
+                addButton.textContent = 'Save to Cloud';
+            }
+        }
+
+        // Delete note
+        async function deleteNote(id) {
+            if (!confirm('Delete this note?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) throw new Error('Failed to delete note');
+                
+                const result = await response.text();
+                showToast('🗑️ Note deleted');
+                await loadNotes(); // Reload the list
+            } catch (error) {
+                console.error('Error deleting note:', error);
+                showToast('❌ Error deleting note', 'error');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('addButton').addEventListener('click', addNote);
+        
+        document.getElementById('noteInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addNote();
+            }
+        });
+
+        // Load notes when page loads
+        document.addEventListener('DOMContentLoaded', loadNotes);
+    </script>
+</body>
+</html>
